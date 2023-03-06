@@ -22,11 +22,14 @@
                     name,
                     email,
                     phonenumber
+                    
                 }
                 // post data on the crudcrud //-------------
-                axios.post("https://crudcrud.com/api/227df3e04269498cadccd8ac894ecb35/appointmentData",
+                axios.post("https://crudcrud.com/api/16b92dce7f824a91aa62c749cb72afde/appointmentData",
                 obj).then((response) =>{
-                    showUserOnScreen(response.data)
+                    //-----
+                    obj._id = response.data._id
+                    showUserOnScreen(obj)
                     // console.log(response)
                 })
                 .catch((err)=>{
@@ -38,9 +41,10 @@
                 // localStorage.setItem(obj.email, JSON.stringify(obj));
                 // showUserOnScreen(obj);
             }
-
+            
+            // Get data from crudcrud to show on screen//----------------
             window.addEventListener("DOMContentLoaded", ()=>{
-                axios.get("https://crudcrud.com/api/227df3e04269498cadccd8ac894ecb35/appointmentData")
+                axios.get("https://crudcrud.com/api/16b92dce7f824a91aa62c749cb72afde/appointmentData")
                 .then((response) =>{
                     console .log(response)
                     for(var i=0; i<response.data.length; i++){
@@ -67,9 +71,19 @@
                 childEl.appendChild(delBtn);
                 parentEl.appendChild(childEl);
 
+
+                // delete data from crud and from website
                 delBtn.onclick = () => {
-                    localStorage.removeItem(obj.email);
-                    parentEl.removeChild(childEl);
+                    axios.delete(`https://crudcrud.com/api/16b92dce7f824a91aa62c749cb72afde/appointmentData/${obj._id}`)
+                    .then((response) =>{
+                        parentEl.removeChild(childEl);
+                    })
+                    .catch((error)=>{
+                        console.log(error)
+                    });
+                    // deleteUser(obj._id, childEl);
+                    // localStorage.removeItem(obj.email);
+                    // parentEl.removeChild(childEl);
                 }
 
                 // edit button // -------
